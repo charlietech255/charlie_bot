@@ -36,7 +36,7 @@ try:
 except Exception as e:
     print(f"Model init error: {e}")
 
-DEFAULT_SETTINGS = {"temperature": 1.2}
+DEFAULT_SETTINGS = {"temperature": 1.9}
 
 class TemperatureUpdate(BaseModel):
     temperature: float
@@ -139,4 +139,5 @@ if __name__ == "__main__":
             print("!"*60 + "\n")
         else:
             print(f"Unexpected error: {str(e)}")
+
             traceback.print_exc()
