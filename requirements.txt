@@ -3,6 +3,3 @@ uvicorn
 python-dotenv
 requests
 pydantic
-pyaudio
-keyboard
-wave
