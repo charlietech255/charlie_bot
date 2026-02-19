@@ -38,7 +38,7 @@ def get_model():
 # ────────────────────────────────────────────────
 #  STREAMING RESPONSE
 # ────────────────────────────────────────────────
-def stream_response(messages, temperature=1.2, print_output=True):
+def stream_response(messages, temperature=1.9, print_output=True):
     payload = {
         "model": MODEL,
         "messages": messages,
@@ -191,7 +191,7 @@ def interpretor(user_input, jailbreak_messages, retry_count=0, max_retries=2):
     context_messages = jailbreak_messages + [{"role": "user", "content": english_input}]
     
     print(f"[Interpretor] Sending to model (attempt {retry_count+1})...", end="", flush=True)
-    raw_response = stream_response(context_messages, temperature=1.2, print_output=False) 
+    raw_response = stream_response(context_messages, temperature=1.9, print_output=False) 
     print(f" Done.\n[Raw Response]: {raw_response[:100]}...")
 
     # Step 4: Check if refinement is needed
@@ -334,7 +334,7 @@ def main():
     print("  /styles          – list personalities")
     print("  /style <name>    – switch personality")
     print("  /interpreter     – toggle interpreter mode")
-    print("  /temp <value>    – set temperature (default 1.2)")
+    print("  /temp <value>    – set temperature (default 1.9)")
     print("  /quit            – exit")
     print("-" * 60)
     print("🌐 DEFAULT ENGLISH | ❌ Swahili politely refused")
