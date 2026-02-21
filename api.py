@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
 import os
-import nm
+import machine as nm
 import traceback
 from dotenv import load_dotenv
 
@@ -12,9 +12,13 @@ load_dotenv()
 
 app = FastAPI(title="Charlie Bot API")
 
+# Security Configuration - Load Allowed Origins
+origins_str = os.getenv("ALLOWED_ORIGINS", "")
+allowed_origins = [o.strip() for o in origins_str.split(",")]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -36,7 +40,7 @@ try:
 except Exception as e:
     print(f"Model init error: {e}")
 
-DEFAULT_SETTINGS = {"temperature": 1.9}
+DEFAULT_SETTINGS = {"temperature": 1.2}
 
 class TemperatureUpdate(BaseModel):
     temperature: float
@@ -139,5 +143,4 @@ if __name__ == "__main__":
             print("!"*60 + "\n")
         else:
             print(f"Unexpected error: {str(e)}")
-
             traceback.print_exc()
