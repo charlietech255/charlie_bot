@@ -13,7 +13,7 @@ load_dotenv()
 app = FastAPI(title="Charlie Bot API")
 
 # Security Configuration - Load Allowed Origins
-origins_str = os.getenv("ALLOWED_ORIGINS", "")
+origins_str = os.getenv("ALLOWED_ORIGINS", "https://dsnonline.store")
 allowed_origins = [o.strip() for o in origins_str.split(",")]
 
 app.add_middleware(
@@ -144,4 +144,5 @@ if __name__ == "__main__":
         else:
             print(f"Unexpected error: {str(e)}")
             traceback.print_exc()
+
 
