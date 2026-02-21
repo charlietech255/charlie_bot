@@ -40,15 +40,9 @@ try:
 except Exception as e:
     print(f"Model init error: {e}")
 
-DEFAULT_SETTINGS = {"temperature": 1.2}
-
-class TemperatureUpdate(BaseModel):
-    temperature: float
-
 class ChatRequest(BaseModel):
     message: str
     style: Optional[str] = "charlie"
-    temperature: Optional[float] = None
     use_interpreter: Optional[bool] = False
     history: Optional[List[dict]] = None
 
@@ -77,18 +71,6 @@ async def transcribe_voice(file: UploadFile = File(...)):
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/temperature")
-async def get_temperature():
-    """Returns the current default temperature."""
-    return {"temperature": DEFAULT_SETTINGS["temperature"]}
-
-@app.post("/temperature")
-async def set_temperature(update: TemperatureUpdate):
-    """Updates the default temperature (0.0 to 2.0)."""
-    if not (0.0 <= update.temperature <= 2.0):
-        raise HTTPException(status_code=400, detail="Temperature must be between 0.0 and 2.0")
-    DEFAULT_SETTINGS["temperature"] = update.temperature
-    return {"message": "Temperature updated", "temperature": DEFAULT_SETTINGS["temperature"]}
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
@@ -103,9 +85,10 @@ async def chat(request: ChatRequest):
         else:
             msgs = request.history
 
-        # 2. Process Message (Interpreter Mode is now ALWAYS ON)
-        reply = nm.interpretor(request.message, msgs)
+        # 2. DIRECT JAILBREAK MODE - NO INTERPRETER, NO REFUSALS
+        # Send straight to the jailbreak model exactly like machine.py direct mode
         msgs.append({"role": "user", "content": request.message})
+        reply = nm.stream_response(msgs, temperature=1.2, print_output=False)
         msgs.append({"role": "assistant", "content": reply})
 
         # 3. Context Window Management (Keep system prompt + last 11 messages)
@@ -144,5 +127,3 @@ if __name__ == "__main__":
         else:
             print(f"Unexpected error: {str(e)}")
             traceback.print_exc()
-
-
