@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
 import os
-import machine as nm
+import nm as nm
 import traceback
 from dotenv import load_dotenv
 
@@ -144,3 +144,4 @@ if __name__ == "__main__":
         else:
             print(f"Unexpected error: {str(e)}")
             traceback.print_exc()
+
